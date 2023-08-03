@@ -2,6 +2,8 @@
 
 This library contains an enhanced JS API that can be used to build Java wrappers of client side components for Vaadin.
 
+This helper library is intended to be used only temporarily, until StringTemplate based API is ready in both Java itself and Vaadin.
+
 A real world usage example is available at [MapLibre GL integration](https://github.com/parttio/maplibre).
 
 ### Development
