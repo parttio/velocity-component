@@ -60,7 +60,7 @@ public class UsageExample extends AbstractVelocityJsComponent {
         // a call with special context paremeters
         velocityJs("""
                 // $serverElement refers to the paragraphElement
-                // instantiated above, using {} form so that 
+                // instantiated above. Using {} syntax below so that 
                 // Velocity don't try to parse ".style.color"
                 ${serverElement}.style.color = "red";
                             
