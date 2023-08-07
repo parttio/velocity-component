@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.parttio</groupId>
     <artifactId>velocity-component</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>0.0.2</version>
     <name>VelocityComponent</name>
     <description>A Helper Library to build JavaScript components for Vaadin using Velocity templating engine powered JS.</description>
     <url>https://github.com/parttio/velocity-component</url>
@@ -42,7 +42,7 @@
         <url>https://github.com/parttio/velocity-component</url>
         <connection>scm:git:git://github.com/parttio/velocity-component.git</connection>
         <developerConnection>scm:git:ssh://git@github.com:/parttio/velocity-component.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>velocity-component-0.0.2</tag>
     </scm>
     
     <distributionManagement>
