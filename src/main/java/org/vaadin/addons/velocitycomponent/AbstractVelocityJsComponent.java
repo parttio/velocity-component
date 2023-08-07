@@ -6,6 +6,7 @@ import com.vaadin.flow.dom.Element;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
+import org.apache.velocity.app.VelocityEngine;
 
 import java.io.Serializable;
 import java.io.StringWriter;
@@ -30,11 +31,13 @@ import java.util.Properties;
  */
 public abstract class AbstractVelocityJsComponent extends Component {
 
+    static VelocityEngine ve;
     static {
         Properties p = new Properties();
         p.setProperty("resource.loader", "class");
-        p.setProperty("class.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
-        Velocity.init( p );
+        p.setProperty("class.resource.loader.class", org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader.class.getName());
+        ve = new VelocityEngine();
+        ve.init(p);
     }
 
     /**
@@ -67,7 +70,7 @@ public abstract class AbstractVelocityJsComponent extends Component {
             specialParameters = Collections.emptyList();
         }
         StringWriter script = new StringWriter();
-        Velocity.evaluate(ctx, script, "velocityJsComponent", jsVelocityTemplate);
+        ve.evaluate(ctx, script, "velocityJsComponent", jsVelocityTemplate);
         Serializable[] parameters = specialParameters.toArray(new Serializable[0]);
         return getElement().executeJs(script.toString(), parameters);
     }
@@ -102,7 +105,7 @@ public abstract class AbstractVelocityJsComponent extends Component {
             }
         });
 
-        Template template = Velocity.getTemplate(templateName);
+        Template template = ve.getTemplate(templateName);
         StringWriter sw = new StringWriter();
         template.merge(ctx,
                 sw
