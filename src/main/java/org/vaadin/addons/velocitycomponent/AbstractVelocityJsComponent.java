@@ -3,6 +3,7 @@ package org.vaadin.addons.velocitycomponent;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.page.PendingJavaScriptResult;
 import com.vaadin.flow.dom.Element;
+import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * This is a base class for components that use Velocity to
@@ -27,6 +29,13 @@ import java.util.Map;
  * </p>
  */
 public abstract class AbstractVelocityJsComponent extends Component {
+
+    static {
+        Properties p = new Properties();
+        p.setProperty("resource.loader", "class");
+        p.setProperty("class.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
+        Velocity.init( p );
+    }
 
     /**
      * Get the VelocityContext for this component.
@@ -77,6 +86,29 @@ public abstract class AbstractVelocityJsComponent extends Component {
             }
         });
         return velocityJs(jsVelocityTemplate, ctx, specialParameters);
+    }
+
+    public PendingJavaScriptResult jsTemplate(String templateName, Map<String, Object> additionalContext) {
+        VelocityContext ctx = new VelocityContext(getVelocityContext());
+        List<Element> specialParameters = new ArrayList<>();
+        additionalContext.forEach((key, val) -> {
+            if (val instanceof Element) {
+                // Special handling for Vaadin Elements
+                Element element = (Element) val;
+                ctx.put(key, "$"+specialParameters.size());
+                specialParameters.add(element);
+            } else {
+                ctx.put(key, val);
+            }
+        });
+
+        Template template = Velocity.getTemplate(templateName);
+        StringWriter sw = new StringWriter();
+        template.merge(ctx,
+                sw
+        );
+        Serializable[] parameters = specialParameters.toArray(new Serializable[0]);
+        return getElement().executeJs(sw.toString(), parameters);
     }
 
 }
