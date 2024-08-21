@@ -10,6 +10,8 @@ import elemental.json.JsonType;
 import elemental.json.JsonValue;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Base64;
+
 import static java.util.Arrays.stream;
 
 public class VElement {
@@ -74,10 +76,16 @@ public class VElement {
 
     /**
      * Listen to a custom client side event and receive the payload in "event.detail".
-     * If the event type/payload is not String, Integer, Double or Boolean, it is expected to be a JSON
-     * and deserialized to the event type using Jackson ObjectMapper.
+     * If the event type/payload is not String, Integer, Double or Boolean. byte[] can be used
+     * if the client side sends the data as a base64 encoded string.
+     *<p>
+     * Anything else is expected to be a JSON and deserialized to the event type using
+     * Jackson ObjectMapper.
+     *</p>
      *
+     * <p>
      * On the client side, the event should be dispatched with a CustomEvent with the detail property.
+     * </p>
      *
      * @param eventName the name of the event
      * @param eventType the DTO of the "event.detail"
@@ -97,6 +105,8 @@ public class VElement {
                 value = (T) Double.valueOf(jsonValue.asNumber());
             } else if(eventType == Boolean.class) {
                 value = (T) Boolean.valueOf(jsonValue.asBoolean());
+            } else if(eventType == byte[].class) {
+                value = (T) Base64.getDecoder().decode(jsonValue.asString());
             } else if(jsonValue.getType() == JsonType.OBJECT) {
                 try {
                     value = objectMapper.readValue(jsonValue.toJson(), eventType);
