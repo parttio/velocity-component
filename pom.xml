@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
+    <!-- The project parent defines basic requirements for the add-on -->
+    <parent>
+        <groupId>in.virit.sb</groupId>
+        <artifactId>viritin-addon-project-parent</artifactId>
+        <version>0.0.3</version>
+    </parent>
+
     <groupId>org.parttio</groupId>
     <artifactId>velocity-component</artifactId>
     <version>0.0.3-SNAPSHOT</version>
@@ -8,6 +16,9 @@
     <description>A Helper Library to build JavaScript components for Vaadin using Velocity templating engine powered JS.</description>
     <url>https://github.com/parttio/velocity-component</url>
     <properties>
+        <!-- You can define the Vaadin version used during development as property if needed
+             default comes from the parent though.
+         -->
         <vaadin.version>24.4.10</vaadin.version>
     </properties>
     <organization>
@@ -25,17 +36,6 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>com.vaadin</groupId>
-                <artifactId>vaadin-bom</artifactId>
-                <type>pom</type>
-                <scope>import</scope>
-                <version>${vaadin.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <scm>
         <url>https://github.com/parttio/velocity-component</url>
@@ -57,86 +57,38 @@
     </issueManagement>    
 
     <dependencies>
-        <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-core</artifactId>
-        </dependency>
+        <!-- In simple add-ons, dependency section can be empty as the parent provides essentials -->
+
         <dependency>
             <groupId>org.apache.velocity</groupId>
             <artifactId>velocity-engine-core</artifactId>
             <version>2.3</version>
         </dependency>
 
+        <!-- Copilot is currently excluded in the parent as it currently slows down the startup quite a bit,
+             but can be added back if needed for development:
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
+            <groupId>com.vaadin</groupId>
+            <artifactId>copilot</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>in.virit</groupId>
-            <artifactId>viritin</artifactId>
-            <version>2.1.0</version>
-            <scope>test</scope>
-        </dependency>
+         -->
     </dependencies>
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.11.0</version>
-                <configuration>
-                    <release>17</release>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.1.0</version>
-                <configuration>
-                    <excludes>
-                        <exclude>META-INF/VAADIN/config/flow-build-info.json</exclude>
-                    </excludes>
-                    <archive>
-                        <index>true</index>
-                        <manifest>
-                            <addClasspath>false</addClasspath>
-                            <addDefaultImplementationEntries>true
-                            </addDefaultImplementationEntries>
-                        </manifest>
-                        <manifestEntries>
-                            <Vaadin-Package-Version>1</Vaadin-Package-Version>
-                        </manifestEntries>
-                    </archive>
-                </configuration>
-            </plugin>
-
+            <!-- The maven-release-plugin is used to deploy this add-on to Maven Central.
+                 Plugin configs required for Vaadin add-on itself are defined in the parent pom.
+            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
-                <version>3.0.0-M7</version>
+                <version>3.1.0</version>
                 <configuration>
                     <autoVersionSubmodules>true</autoVersionSubmodules>
                     <useReleaseProfile>false</useReleaseProfile>
                     <releaseProfiles>release</releaseProfiles>
                     <goals>deploy</goals>
-                </configuration>
-            </plugin>
-           
-            <plugin>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-maven-plugin</artifactId>
-                <version>11.0.15</version>
-                <configuration>
-                    <scan>-1</scan>
-                    <!-- Use test scope because the UI/test classes are in
-                    the test package. -->
-                    <useTestScope>true</useTestScope>
-                    <supportedPackagings>
-                        <supportedPackaging>jar</supportedPackaging>
-                    </supportedPackagings>
                 </configuration>
             </plugin>
         </plugins>
