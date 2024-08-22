@@ -20,6 +20,7 @@
              default comes from the parent though.
          -->
         <vaadin.version>24.4.10</vaadin.version>
+        <maven.compiler.release>17</maven.compiler.release>
     </properties>
     <organization>
         <name>Team Parttio</name>
