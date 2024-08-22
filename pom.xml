@@ -8,7 +8,7 @@
     <description>A Helper Library to build JavaScript components for Vaadin using Velocity templating engine powered JS.</description>
     <url>https://github.com/parttio/velocity-component</url>
     <properties>
-        <vaadin.version>24.1.4</vaadin.version>
+        <vaadin.version>24.4.10</vaadin.version>
     </properties>
     <organization>
         <name>Team Parttio</name>
@@ -36,7 +36,6 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
 
     <scm>
         <url>https://github.com/parttio/velocity-component</url>
