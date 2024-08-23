@@ -82,7 +82,7 @@
                 <artifactId>nexus-staging-maven-plugin</artifactId>
                 <configuration>
                     <!-- Redefine the server, the parent publishes through the older OSS nexus -->
-                    <serverId>ossrh</serverId>
+                    <serverId>s01</serverId>
                     <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
                 </configuration>
             </plugin>
