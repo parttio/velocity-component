@@ -48,20 +48,6 @@ public class VElementView extends VerticalLayout {
                                 }));
                             """);
                 }),
-                new Button("Click me too", e -> {
-                    // This is in theory bit more efficient for the server
-                    // as it does not need to deserialize-serialize (with GWT library)
-                    // and then desirialize with Jackson, but only once with Jackson
-                    getElement().executeJs("""
-                                this.dispatchEvent(new CustomEvent('foo-car', {
-                                    detail: JSON.stringify({
-                                        foo: 'foo',
-                                        bar: 'bar',
-                                        car: 'car'
-                                    })
-                                }));
-                            """);
-                }),
                 new Button("Fire string", e -> {
                     getElement().executeJs("""
                                 this.dispatchEvent(new CustomEvent('string-msg', {

@@ -9,7 +9,7 @@ Check the usage from `src/test`. A real world usage example is available at [Map
 Compared to standard `getElement().executeJs()` style API, this library provides the following benefits:
 
  * Parameter values are more readable in the JS snippets, e.g. '$foo' instead of '$0'
- * Possibility to pass JS objects and/or JSON to JS snippets, without transferring as string (less code, better performance). 
+ * ~~~Possibility to pass JS objects and/or JSON to JS snippets, without transferring as string (less code, better performance).~~~ Vaadin 25 supports this now as well 💪 
  * Velocity template based JS code generation in general, e.g. generate JS code using loops and conditionals
 
 ### Development

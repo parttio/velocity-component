@@ -1,16 +1,11 @@
 package org.vaadin.addons.velocitycomponent;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.dom.DomListenerRegistration;
 import com.vaadin.flow.dom.Element;
 import com.vaadin.flow.function.SerializableConsumer;
-import com.vaadin.flow.shared.Registration;
-import elemental.json.JsonType;
-import elemental.json.JsonValue;
 import org.apache.commons.lang3.StringUtils;
-
-import java.util.Base64;
+import tools.jackson.databind.ObjectMapper;
 
 import static java.util.Arrays.stream;
 
@@ -45,7 +40,7 @@ public class VElement {
      * @return a registration that can be used to remove the listener
      * @param <T> the type of the event
      */
-    public <T> Registration on(Class<T> eventType, SerializableConsumer<T> listener) {
+    public <T> DomListenerRegistration on(Class<T> eventType, SerializableConsumer<T> listener) {
         String simpleName = eventType.getSimpleName();
         if(simpleName.endsWith("Event")) {
             simpleName = simpleName.substring(0, simpleName.length() - 5);
@@ -55,23 +50,9 @@ public class VElement {
                 .reduce((a, b) -> a + "-" + b).get();
 
         return element.addEventListener(eventName, event -> {
-            JsonValue jsonValue = event.getEventData().get("event.detail");
-            T value;
-            if(jsonValue.getType() == JsonType.OBJECT) {
-                try {
-                    value = objectMapper.readValue(jsonValue.toJson(), eventType);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            } else {
-                try {
-                    value = objectMapper.readValue(jsonValue.asString().toString(), eventType);
-                } catch (JsonProcessingException e) {
-                    throw new RuntimeException(e);
-                }
-            }
+            T value = event.getEventDetail(eventType);
             listener.accept(value);
-        }).addEventData("event.detail");
+        }).addEventDetail();
     }
 
     /**
@@ -93,35 +74,11 @@ public class VElement {
      * @return a registration that can be used to remove the listener
      * @param <T> the type of the event
      */
-    public <T> Registration on(String eventName, Class<T> eventType, SerializableConsumer<T> listener) {
+    public <T> DomListenerRegistration on(String eventName, Class<T> eventType, SerializableConsumer<T> listener) {
         return element.addEventListener(eventName, event -> {
-            JsonValue jsonValue = event.getEventData().get("event.detail");
-            T value;
-            if(eventType == String.class) {
-                value = (T) jsonValue.asString();
-            } else if(eventType == Integer.class) {
-                value = (T) Integer.valueOf((int) jsonValue.asNumber());
-            } else if(eventType == Double.class) {
-                value = (T) Double.valueOf(jsonValue.asNumber());
-            } else if(eventType == Boolean.class) {
-                value = (T) Boolean.valueOf(jsonValue.asBoolean());
-            } else if(eventType == byte[].class) {
-                value = (T) Base64.getDecoder().decode(jsonValue.asString());
-            } else if(jsonValue.getType() == JsonType.OBJECT) {
-                try {
-                    value = objectMapper.readValue(jsonValue.toJson(), eventType);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            } else {
-                try {
-                    value = objectMapper.readValue(jsonValue.asString().toString(), eventType);
-                } catch (JsonProcessingException e) {
-                    throw new RuntimeException(e);
-                }
-            }
+            T value = event.getEventDetail(eventType);
             listener.accept(value);
-        }).addEventData("event.detail");
+        }).addEventDetail();
     }
 
 }

@@ -6,7 +6,7 @@
     <parent>
         <groupId>in.virit.sb</groupId>
         <artifactId>viritin-addon-project-parent</artifactId>
-        <version>0.0.5</version>
+        <version>0.0.9-SNAPSHOT</version>
     </parent>
 
     <groupId>org.parttio</groupId>
@@ -19,7 +19,7 @@
         <!-- You can define the Vaadin version used during development as property if needed
              default comes from the parent though.
          -->
-        <vaadin.version>24.4.10</vaadin.version>
+        <vaadin.version>25.0.0-beta7</vaadin.version>
     </properties>
     <organization>
         <name>Team Parttio</name>
@@ -43,13 +43,6 @@
         <developerConnection>scm:git:ssh://git@github.com:/parttio/velocity-component.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
-    
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
 
     <issueManagement>
         <system>GitHub</system>
@@ -74,20 +67,6 @@
         </dependency>
          -->
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <configuration>
-                    <!-- Redefine the server, the parent publishes through the older OSS nexus -->
-                    <serverId>s01</serverId>
-                    <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>
 

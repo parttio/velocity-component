@@ -1,12 +1,13 @@
 package org.vaadin.addons.velocitycomponent;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * A trivial helper class for JS components to render
  * Java DTOs as JSON. Exposed to Velocity templates via
  * VelocityComponentDecorator.
+ *
+ * TODO figure out if this can now be removed altogether in V25
  */
 public class Json {
 
@@ -17,11 +18,6 @@ public class Json {
      * @return the JSON representation of the object
      */
     static public String of(Object o) {
-        try {
-            return mapper.writeValueAsString(o);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return "{'value': 'JSON ERROR'}";
-        }
+        return mapper.writeValueAsString(o);
     }
 }
